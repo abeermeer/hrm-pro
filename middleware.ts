@@ -1,22 +1,23 @@
-import { auth } from "@/lib/auth"
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth
-  const isDashboard = req.nextUrl.pathname.startsWith("/dashboard")
-  const isAuthPage = ["/login", "/signup", "/forgot-password"].includes(req.nextUrl.pathname)
+export function middleware(request: NextRequest) {
+  const sessionCookie = request.cookies.get("authjs.session-token")
+  const isLoggedIn = !!sessionCookie
+  const isDashboard = request.nextUrl.pathname.startsWith("/dashboard")
+  const isAuthPage = ["/login", "/signup", "/forgot-password"].includes(request.nextUrl.pathname)
 
   if (isDashboard && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl))
+    return NextResponse.redirect(new URL("/login", request.url))
   }
 
   if (isAuthPage && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl))
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/dashboard/:path*", "/login", "/signup", "/forgot-password"],
 }
