@@ -35,3 +35,9 @@ body {
     --foreground: #e2e8f0;
   }
 }
+
+@media (min-width: 768px) {
+  .md\:ml-64 {
+    margin-top: -47em;
+  }
+}
