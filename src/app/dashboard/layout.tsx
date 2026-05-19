@@ -21,7 +21,7 @@ export default function DashboardLayout({
   }, [mobileMenuOpen])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <div className="hidden md:block">
         <Sidebar />
       </div>
