@@ -5,7 +5,7 @@ generator client {
 // For local development: provider = "sqlite"
 // For production: provider = "postgresql" (update .env and prisma.config.ts accordingly)
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model User {

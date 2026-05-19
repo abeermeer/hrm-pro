@@ -1,12 +1,25 @@
-import { PrismaClient, Prisma } from "@prisma/client"
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3"
+import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
 import bcrypt from "bcryptjs"
+import "dotenv/config"
 
-const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL || "file:./dev.db" })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL || "" })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
   console.log("🌱 Seeding database...")
+
+  await prisma.auditLog.deleteMany({})
+  await prisma.expenseClaim.deleteMany({})
+  await prisma.asset.deleteMany({})
+  await prisma.payrollRecord.deleteMany({})
+  await prisma.leaveRequest.deleteMany({})
+  await prisma.attendance.deleteMany({})
+  await prisma.employee.deleteMany({})
+  await prisma.user.deleteMany({})
+  await prisma.leaveType.deleteMany({})
+  await prisma.department.deleteMany({})
+  await prisma.company.deleteMany({})
 
   const company = await prisma.company.create({
     data: {
@@ -76,7 +89,7 @@ async function main() {
         data: {
           ...emp,
           companyId: company.id,
-          salary: new Prisma.Decimal(emp.salary.toString()),
+          salary: emp.salary,
           status: emp.status as any,
         },
       })
